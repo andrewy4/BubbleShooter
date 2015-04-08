@@ -6,7 +6,9 @@ package andrewy4.bubbleshooter;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view;
+import android.view.*;
+import android.content.*;
+import android.graphics.*;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -19,15 +21,18 @@ public class BubbleShooterView extends SurfaceView implements SurfaceHolder.Call
         getHolder () . addCallback ( this ) ;
         setFocusable ( true ) ;
 // Initialize game state variables . DON ’T RENDER THE GAME YET .
-        ...
+    //do stuff here//
     }
     @Override
     public void surfaceCreated ( SurfaceHolder holder ) {
 // Construct game initial state ( bubbles , etc .)
-        ...
+        //Do stuff here//
+
+        //need to declare the bst thread here, look it up//
 // Launch animator thread .
         bst = new BubbleShooterThread ( this ) ;
         bst . start () ;
+
     }
     @Override
     public void surfaceChanged ( SurfaceHolder holder ,
@@ -50,7 +55,7 @@ public class BubbleShooterView extends SurfaceView implements SurfaceHolder.Call
 // Update game state in response to events :
 // touch - down , touch - up , and touch - move .
 // Current finger position .
-        4
+
         int curX = e . getX () ;
         int curY = e . getY () ;
         switch ( e . getAction () ) {
@@ -69,7 +74,7 @@ public class BubbleShooterView extends SurfaceView implements SurfaceHolder.Call
     public void advanceFrame ( Canvas c ) {
 // Update game state to animate moving or exploding bubbles
 // ( e . g . , advance location of moving bubble ) .
-        ...
+        // do stuff here //
         renderGame ( c ) ;
     }
     private void renderGame ( Canvas c ) {

@@ -6,6 +6,9 @@ package andrewy4.bubbleshooter;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.*;
+import android.content.*;
+import android.graphics.*;
 import android.view.Menu;
 import android.view.MenuItem;
 

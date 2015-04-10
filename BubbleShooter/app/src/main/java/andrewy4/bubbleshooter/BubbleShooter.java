@@ -9,10 +9,12 @@ import android.view.MenuItem;
 public class BubbleShooter extends ActionBarActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bubble_shooter);
+    protected void onCreate ( Bundle savedInstanceState ) {
+    super . onCreate ( savedInstanceState );
+// Only instantiate the main view
+   setContentView ( new BubbleShooterView ( getBaseContext () ) );
     }
+
 
 
     @Override

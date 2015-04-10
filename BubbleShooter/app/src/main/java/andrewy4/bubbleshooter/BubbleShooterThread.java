@@ -18,27 +18,27 @@ public class BubbleShooterThread extends Thread{
         this . bsv = bsv ;
     }
     public void run () {
-        SurfaceHolder sh = bsv . getHolder () ;
+        SurfaceHolder sh = bsv.getHolder();
 // Main game loop .
-        while ( ! Thread . interrupted () ) {
-            Canvas c = sh . lockCanvas ( null ) ;
+        while (!Thread.interrupted()) {
+            Canvas c = sh.lockCanvas(null);
             try {
-                synchronized ( sh ) {
-                    bsv . advanceFrame ( c ) ;
+                synchronized (sh) {
+                    bsv.advanceFrame(c);
                 }
-            } catch ( Exception e ) {
+            } catch (Exception e) {
             } finally {
-                if ( c != null ) {
-                    sh . unlockCanvasAndPost ( c ) ;
+                if (c != null) {
+                    sh.unlockCanvasAndPost(c);
                 }
             }
 // Set the frame rate by setting this delay
             try {
-                Thread . sleep (30) ;
-            } catch ( InterruptedException e ) {
+                Thread.sleep(30);
+            } catch (InterruptedException e) {
 // Thread was interrupted while sleeping .
-                return ;
+                return;
             }
         }
-
+    }
 }

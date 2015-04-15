@@ -22,11 +22,19 @@ public class Bubble {
     float x_bubble_locat;
     float y_bubble_locat;
 
-    Bubble(float Width, int x_bubble_locat, int y_bubble_locat){
+    public Paint returnColor(){
+        return bubblePaint;
+    }
+    public void change_xy(int Width, int x, int y){
+        this.x_bubble_locat = Width * (x+1);
+        this.y_bubble_locat = Width*(2*y+1);
+    }
+    Bubble(float Width, int x, int y){
         radius = Width;
-        this.x_bubble_locat = x_bubble_locat;
-        this.y_bubble_locat = y_bubble_locat;
+        this.x_bubble_locat = Width * (x+1);
+        this.y_bubble_locat = Width*(2*y+1);
         bubblePaint  = new Paint ();
+        bubblePaint.setStrokeWidth(4.5f);
         Random rand = new Random();
         color = rand.nextInt(7);
        int [] cs = {-256,-65536,-65281,-16711936,-16711681,-16776961,-16777216};

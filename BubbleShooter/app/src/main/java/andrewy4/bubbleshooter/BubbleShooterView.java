@@ -21,6 +21,8 @@ public class BubbleShooterView extends SurfaceView implements SurfaceHolder.Call
     int Height;
     int Width;
     Bubble[][] bubble = new Bubble[14][20];
+    float curX;
+    float curY;
     public BubbleShooterView ( Context context ) {
         super ( context ) ;
 // Notify the SurfaceHolder that you ’d like to receive
@@ -45,14 +47,14 @@ public class BubbleShooterView extends SurfaceView implements SurfaceHolder.Call
                 bubble[y][x + 1] = null;
 
                 if (y<7) {
-                    bubble[y][x] = new Bubble(Width,Width * (x+1), Width*(2*y+1));
+                    bubble[y][x] = new Bubble(Width,x,y);
                 }
                 else{
                     bubble[y][x] = null;
                 }
             }
                 if(y<7)
-                    bubble[y][18] = new Bubble(Width, Width*(19), Width*(2*y+1));
+                    bubble[y][18] = new Bubble(Width,18,y);
 
         }
         for(int y = 1; y<14; y=y+2){
@@ -60,7 +62,7 @@ public class BubbleShooterView extends SurfaceView implements SurfaceHolder.Call
                 bubble[y][x-1] = null;
 
                 if (y<7) {
-                    bubble[y][x] = new Bubble(Width, Width*(x+1), Width*(2*y+1));
+                    bubble[y][x] = new Bubble(Width, x,y);
                 }
                 else{
                     bubble[y][x] = null;
@@ -68,7 +70,7 @@ public class BubbleShooterView extends SurfaceView implements SurfaceHolder.Call
             }
             bubble[y][18] = null;
         }
-
+    bubble[13][9] = new Bubble(Width, 9, 13);
 // Launch animator thread .
         bst = new BubbleShooterThread ( this ) ;
         bst.start();
@@ -94,17 +96,59 @@ public class BubbleShooterView extends SurfaceView implements SurfaceHolder.Call
 // Update game state in response to events :
 // touch - down , touch - up , and touch - move .
 // Current finger position .
-
-        float curX = e . getX () ;
-        float curY = e . getY () ;
+        float x_move;
+        float y_move;
         switch ( e . getAction () ) {
             case MotionEvent . ACTION_DOWN :
+                curX = e . getX () ;
+                curY = e . getY () ;
 // Update Game State .
                 break ;
             case MotionEvent . ACTION_MOVE :
+                curX = e . getX () ;
+                curY = e . getY () ;
 // Update Game State .
                 break ;
             case MotionEvent . ACTION_UP :
+                curX = e . getX () ;
+                curY = e . getY() ;
+
+                x_move = (curX/Width -1);
+                y_move = (curY/Width-1)/2;
+                float y2 = y_move - (int)y_move;
+                if(0<=(int)y_move && (int)y_move<14)
+                {
+                    if((int)y_move%2 == 0){
+                        if((int)x_move%2 ==0) {
+                            bubble[(int) y_move][(int) x_move] = bubble[13][9];
+                            bubble[(int) y_move][(int) x_move].change_xy(Width, (int) x_move, (int) y_move);
+                        }
+                        else if((x_move - (int)x_move)>0.5 && ((int)x_move + 1) <20) {
+                            bubble[(int) y_move][(int) x_move + 1] = bubble[13][9];
+                            bubble[(int) y_move][(int) x_move + 1].change_xy(Width, (int) x_move, (int) y_move+1);
+                        }
+                        else if (0<=((int)x_move - 1)){
+                            bubble[(int) y_move][(int) x_move - 1] = bubble[13][9];
+                            bubble[(int) y_move][(int) x_move - 1].change_xy(Width, (int) x_move, (int) y_move-1);
+                        }
+                    }
+                    if((int)y_move%2 != 0) {
+                        if ((int) x_move % 2 != 0) {
+                            bubble[(int) y_move][(int) x_move] = bubble[13][9];
+                            bubble[(int) y_move][(int) x_move].change_xy(Width, (int) x_move, (int) y_move);
+                        }
+                        else if((x_move- (int)x_move)>0.5 && ((int)x_move + 1) <20) {
+                            bubble[(int) y_move][(int) x_move + 1] = bubble[13][9];
+                            bubble[(int) y_move][(int) x_move + 1].change_xy(Width, (int) x_move, (int) y_move+1);
+                        }
+                        else if(0<=((int)x_move - 1)){
+                            bubble[(int) y_move][(int) x_move - 1] = bubble[13][9];
+                            bubble[(int) y_move][(int) x_move - 1].change_xy(Width, (int) x_move, (int) y_move-1);
+                        }
+                    }
+                }
+                bubble[13][9] = new Bubble(Width, 9, 13);
+
 // Update Game State .
                 break ;
         }
@@ -131,5 +175,7 @@ public class BubbleShooterView extends SurfaceView implements SurfaceHolder.Call
                     continue;
                 bubble[y][x].drawBubble(c);
             }
+        c.drawLine(bubble[13][9].x_bubble_locat, bubble[13][9].y_bubble_locat, curX, curY, bubble[13][9].returnColor());
+
    }
 }

@@ -20,7 +20,7 @@ public class BubbleShooterView extends SurfaceView implements SurfaceHolder.Call
     BubbleShooterThread bst;
     int Height;
     int Width;
-    Bubble[][] bubble = new Bubble[7][20];
+    Bubble[][] bubble = new Bubble[14][20];
     public BubbleShooterView ( Context context ) {
         super ( context ) ;
 // Notify the SurfaceHolder that you ’d like to receive
@@ -38,23 +38,33 @@ public class BubbleShooterView extends SurfaceView implements SurfaceHolder.Call
         Height = getHeight();
         Width = getWidth();
         Width = Width/20;
-        Random rand = new Random();
+        int z = 0;
         int color;
-        for(int y =0;y<7;y=y+2) {
+        for(int y =0;y<14;y=y+2) {
             for (int x = 0; x <= 17; x = x + 2) {
                 bubble[y][x + 1] = null;
-                color = rand.nextInt(7)+1;
-                bubble[y][x] = new Bubble(Width, color);
+
+                if (y<7) {
+                    bubble[y][x] = new Bubble(Width,Width * (x+1), Width*(2*y+1));
+                }
+                else{
+                    bubble[y][x] = null;
+                }
             }
-                color = rand.nextInt(7)+1;
-                bubble[y][18] = new Bubble(Width, color);
+                if(y<7)
+                    bubble[y][18] = new Bubble(Width, Width*(19), Width*(2*y+1));
 
         }
-        for(int y = 1; y<7; y=y+2){
+        for(int y = 1; y<14; y=y+2){
             for (int x = 1; x <=18; x = x +2){
                 bubble[y][x-1] = null;
-                color = rand.nextInt(7)+1;
-                bubble[y][x] = new Bubble(Width, color);
+
+                if (y<7) {
+                    bubble[y][x] = new Bubble(Width, Width*(x+1), Width*(2*y+1));
+                }
+                else{
+                    bubble[y][x] = null;
+                }
             }
             bubble[y][18] = null;
         }
@@ -102,7 +112,7 @@ public class BubbleShooterView extends SurfaceView implements SurfaceHolder.Call
     }
     public void advanceFrame ( Canvas c ) {
 // Update game state to animate moving or exploding bubbles
-// ( e . g . , advance location of moving bubble ) .
+// ( e . g . , advance location of moving bubble ).
         // do stuff here //
         renderGame ( c ) ;
     }
@@ -114,15 +124,12 @@ public class BubbleShooterView extends SurfaceView implements SurfaceHolder.Call
         paint.setColor(Color.WHITE);
         paint.setAntiAlias(true);
         c.drawPaint(paint);
-        for (int y = 0; y < 7; y = y + 2)
-            for (int x = 0; x <= 18; x = x + 2)
-            {
-                bubble[y][x].drawBubble(c, Width * (x+1), Width*(2*y+1));
+
+        for(int y = 0; y<14; y++)
+            for(int x =0; x<20;x++) {
+                if(bubble[y][x] == null)
+                    continue;
+                bubble[y][x].drawBubble(c);
             }
-        for(int y=1;y<=5; y= y+2)
-            for(int x=1; x<=18; x = x+2)
-            {
-                bubble[y][x].drawBubble(c, Width*(x+1), Width*(2*y+1));
-            }
-    }
+   }
 }

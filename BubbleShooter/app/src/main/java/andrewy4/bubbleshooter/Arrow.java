@@ -1,6 +1,6 @@
 package andrewy4.bubbleshooter;
 
-/**
+/*
  * Created by Ohyehyu on 4/16/2015.
  */
 public class Arrow {

@@ -1,7 +1,7 @@
 package andrewy4.bubbleshooter;
 
 /*
- * Created by Chau on 4/8/2015.
+ * Created by Chau, Andrew on 4/8/2015.
  */
 
 import android.support.v7.app.ActionBarActivity;
@@ -18,15 +18,16 @@ import java.util.Random;
 public class BubbleShooterView extends SurfaceView implements SurfaceHolder.Callback {
     BubbleShooterThread bst;
     int Height;
-    int Width;
-    Bubble[][] bubble = new Bubble[14][19];
-    GameFunction[][] stick = new GameFunction[14][19];
+    int Width;      //the radius of the bubble
+    int counter;              //count deletion
+    Bubble[][] bubble = new Bubble[14][19];             // bubble array
+    GameFunction[][] stick = new GameFunction[14][19];  //stick array
     Bubble shootingBubble;
     Bubble tempBubble;
-    float curX, arrowX;
+    float curX, arrowX;   //click point, arrow point
     float curY, arrowY;
     boolean starting = false;
-    float arrowX_origin;
+    float arrowX_origin;  //starting of the arrow point
     float arrowY_origin;
 
     public BubbleShooterView ( Context context ) {
@@ -46,7 +47,7 @@ public class BubbleShooterView extends SurfaceView implements SurfaceHolder.Call
         Height = getHeight();
         Width = getWidth();
         Width = Width/20;
-        for(int y =0;y<14;y=y+2) {
+        for(int y =0;y<14;y=y+2) {                         //following t=2 double for loops create the bubble array in the even and odd row
             for (int x = 0; x <= 17; x = x + 2) {
                 bubble[y][x + 1] = null;
 
@@ -76,12 +77,12 @@ public class BubbleShooterView extends SurfaceView implements SurfaceHolder.Call
         }
 
 
-        for(int y=0; y<14;y++)
+        for(int y=0; y<14;y++)                                  //creating sticking array for the sticking function
             for(int x=0; x<19;x++)
                 stick[y][x]= new GameFunction(Width, x,y);
 
 
-    bubble[13][9] = new Bubble(Width, 9, 13);
+    bubble[13][9] = new Bubble(Width, 9, 13);               //location of the shooting bubble
     arrowX_origin = bubble[13][9].x_bubble_locat;
     arrowY_origin = bubble[13][9].y_bubble_locat;
 // Launch animator thread .
@@ -122,7 +123,7 @@ public class BubbleShooterView extends SurfaceView implements SurfaceHolder.Call
             case MotionEvent . ACTION_MOVE :
                 curX = e . getX () ;
                 curY = e . getY () ;
-                Arrow arrow = new Arrow(bubble[13][9],curX,curY,getWidth());
+                Arrow arrow = new Arrow(bubble[13][9],curX,curY,getWidth());      //initialize the arrow
                 this.arrowX = arrow.arrowX;
                 this.arrowY = arrow. arrowY;
 
@@ -131,9 +132,9 @@ public class BubbleShooterView extends SurfaceView implements SurfaceHolder.Call
             case MotionEvent . ACTION_UP :
                 curX = e . getX();
                 curY = e . getY () ;
-                shootingBubble = bubble[13][9];
-                shootingBubble.velCalculation(curX, curY);
-                bubble[13][9] = new Bubble(Width,9,13);
+                shootingBubble = bubble[13][9];                  //assign shooting bubble
+                shootingBubble.velCalculation(curX, curY);       //speed of the shooting bubble
+                bubble[13][9] = new Bubble(Width,9,13);          //put new bubble in
 
 
 
@@ -154,27 +155,38 @@ public class BubbleShooterView extends SurfaceView implements SurfaceHolder.Call
     private void renderGame ( Canvas c ) {
 // Render the game elements : bubbles ( fixed , moving , exploding )
 // and aiming arrow .
-        Paint paint = new Paint();
+        Paint paint = new Paint();                        //background step up start
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.WHITE);
         paint.setAntiAlias(true);
-        c.drawPaint(paint);
-
-
+        c.drawPaint(paint);                              //background step up end
+        stick[0][0].checkAvailableSpot(bubble,stick);    //check where can the shooting bubble stick
         for(int y = 0; y<14; y++)
             for(int x =0; x<19;x++) {
                 if(bubble[y][x] == null)
                     continue;
-                stick[y][x].checkAvailableSpot(bubble,stick);
                 bubble[y][x].drawBubble(c);
+                if(counter<3){  //deleting condition
+                    bubble[y][x].changeDeleteToFalse();
+                }
+                if (bubble[y][x].returnColorDelete()) {
+                    bubble[y][x] = null;
+                }
             }
-        if(starting) {
+        if(starting) {   //arrow condition
             c.drawLine(arrowX_origin,arrowY_origin, arrowX, arrowY, bubble[13][9].returnColor());
         }
-
+        if(shootingBubble != null) { //sticking shooting bubble condition
             shootingBubble.drawBubble(c);
-        if(shootingBubble != null) {
-            stick[0][0].stickBubble(c, bubble,shootingBubble, stick);
+            tempBubble = stick[0][0].stickBubble(c, bubble, shootingBubble, stick);
         }
+        if(tempBubble!= null){  //deleting bubble condition
+
+            shootingBubble = null;
+            counter = stick[0][0].bubbleDeletion(bubble,tempBubble,(tempBubble.x),(tempBubble.y),0);
+            tempBubble = null;
+        }
+
+        stick[0][0].checkAvailableSpot(bubble,stick); //check where to stick
    }
 }

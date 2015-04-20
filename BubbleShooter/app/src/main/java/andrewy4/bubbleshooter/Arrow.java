@@ -1,8 +1,9 @@
 package andrewy4.bubbleshooter;
 
 /*
- * Created by Ohyehyu on 4/16/2015.
+ * Created by Andrew, Cahu on 4/16/2015.
  */
+//the Arrow class will draw the line from the shooting point to the edge of the screen with the color of the shooting ball.
 public class Arrow {
     public float arrowX;
     public float arrowY;
@@ -16,7 +17,7 @@ public class Arrow {
         float slope = Float.MAX_VALUE;
         if (x_diff != 0)
             slope = y_diff / x_diff;
-
+        //the following conditions are when the line is point to left/top/left wall
         if (slope == Float.MAX_VALUE) {
             arrowX = x_origin;
             arrowY = 0;
